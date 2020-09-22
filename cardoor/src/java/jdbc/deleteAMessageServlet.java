@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Helix
  */
-@WebServlet(name = "deleteAReviewServlet", urlPatterns = {"/deleteAReviewServlet"})
-public class deleteAReviewServlet extends HttpServlet {
+@WebServlet(name = "deleteAMessageServlet", urlPatterns = {"/deleteAMessageServlet"})
+public class deleteAMessageServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class deleteAReviewServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet deleteAReviewServlet</title>");            
+            out.println("<title>Servlet deleteAMessageServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet deleteAReviewServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet deleteAMessageServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -81,13 +81,13 @@ public class deleteAReviewServlet extends HttpServlet {
 
         try {
 
-            String r_id = request.getParameter("r_id");
+            String m_id = request.getParameter("m_id");
 
             DB_Connection obj_DB_Connection = new DB_Connection();
             Connection connection = obj_DB_Connection.get_connection();
             PreparedStatement ps = null;
 
-            String sql = "DELETE FROM `reviews` WHERE r_id ='" + r_id + "' ";
+            String sql = "DELETE FROM `messages` WHERE m_id ='" + m_id + "' ";
             Class.forName("com.mysql.jdbc.Driver");
 
             ps = connection.prepareStatement(sql);

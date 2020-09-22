@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Helix
  */
-@WebServlet(name = "deleteAReviewServlet", urlPatterns = {"/deleteAReviewServlet"})
-public class deleteAReviewServlet extends HttpServlet {
+@WebServlet(name = "makeAReviewServlet", urlPatterns = {"/makeAReviewServlet"})
+public class makeAReviewServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class deleteAReviewServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet deleteAReviewServlet</title>");            
+            out.println("<title>Servlet makeAReviewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet deleteAReviewServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet makeAReviewServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -78,25 +78,26 @@ public class deleteAReviewServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         try {
 
-            String r_id = request.getParameter("r_id");
+            String review_user = request.getParameter("review_user");
+            String review_message = request.getParameter("review_message");
 
             DB_Connection obj_DB_Connection = new DB_Connection();
             Connection connection = obj_DB_Connection.get_connection();
             PreparedStatement ps = null;
 
-            String sql = "DELETE FROM `reviews` WHERE r_id ='" + r_id + "' ";
+            String sql = "insert into reviews (r_user,r_Message) values(?,?)";
             Class.forName("com.mysql.jdbc.Driver");
 
             ps = connection.prepareStatement(sql);
+            ps.setString(1, review_user);
+            ps.setString(2, review_message);
 
             ps.executeUpdate();
 
-
             out.println("<script type=\"text/javascript\">");
-            out.println("location='admin/contact.jsp'");
+            out.println("location='user/bookings.jsp'");
             out.println("</script>");
 
         } catch (ClassNotFoundException ex) {

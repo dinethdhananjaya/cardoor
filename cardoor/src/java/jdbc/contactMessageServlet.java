@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Helix
  */
-@WebServlet(name = "deleteAReviewServlet", urlPatterns = {"/deleteAReviewServlet"})
-public class deleteAReviewServlet extends HttpServlet {
+@WebServlet(name = "contactMessageServlet", urlPatterns = {"/contactMessageServlet"})
+public class contactMessageServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class deleteAReviewServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet deleteAReviewServlet</title>");            
+            out.println("<title>Servlet contactMessageServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet deleteAReviewServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet contactMessageServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -76,35 +76,41 @@ public class deleteAReviewServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+       response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
 
-        try {
+		try {
 
-            String r_id = request.getParameter("r_id");
+			String name = request.getParameter("name");
+			String email = request.getParameter("email");
+			String subject = request.getParameter("subject");
+                        String body = request.getParameter("body");
 
-            DB_Connection obj_DB_Connection = new DB_Connection();
-            Connection connection = obj_DB_Connection.get_connection();
-            PreparedStatement ps = null;
+			DB_Connection obj_DB_Connection = new DB_Connection();
+			Connection connection = obj_DB_Connection.get_connection();
+			PreparedStatement ps = null;
 
-            String sql = "DELETE FROM `reviews` WHERE r_id ='" + r_id + "' ";
-            Class.forName("com.mysql.jdbc.Driver");
+			String sql = "insert into messages (m_name,m_email,m_subject,m_body) values(?,?,?,?)";
+			Class.forName("com.mysql.jdbc.Driver");
 
-            ps = connection.prepareStatement(sql);
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, name);
+			ps.setString(2, email);
+			ps.setString(3, subject);
+			ps.setString(4, body);
 
-            ps.executeUpdate();
+			ps.executeUpdate();
+			
+			out.println("<script type=\"text/javascript\">");
+			out.println("location='user/contact.jsp'");
+			out.println("</script>");
 
+		} catch (ClassNotFoundException ex) {
+			out.println(ex);
 
-            out.println("<script type=\"text/javascript\">");
-            out.println("location='admin/contact.jsp'");
-            out.println("</script>");
-
-        } catch (ClassNotFoundException ex) {
-            out.println(ex);
-
-        } catch (SQLException ex) {
-            out.println(ex);
-        }
+		} catch (SQLException ex) {
+			out.println(ex);
+		}
     }
 
     /**
